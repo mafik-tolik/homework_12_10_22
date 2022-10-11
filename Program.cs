@@ -87,7 +87,7 @@ void Ex56()
 
 
 
-Ex58();
+// Ex58(); // подходит для заполнения массива по спирали с разным количеством строк и столбцов (не только для 4 на 4).
 // Задача 58: Напишите программу, которая заполнит спирально массив 4 на 4 (числами от 1 до 16.). Например, на выходе получается вот такой массив:
 // 01 02 03 04
 // 12 13 14 05
@@ -96,7 +96,37 @@ Ex58();
 
 void Ex58()
 {
+    Random random = new Random();
 
+    int rows = 6;
+    int columns = 9;
+
+    Console.WriteLine($"Размер массива: {rows} * {columns}");
+
+    int[,] numbers = new int[rows, columns];
+
+    int turningPoint = 0; // переменную будем использовать для точки поворота.
+
+    int count = 1; // этим значением будем одновременно заполнять массив и использовать его как счетчик (пока значение не достигнет <rows * columns> включительно).
+    int i = 0;
+    int j = 0;
+
+    while (count <= rows * columns)
+    {
+        numbers[i, j] = count;
+
+        if (i == turningPoint && j < columns - turningPoint - 1) j++;
+        else if (j == columns - turningPoint - 1 && i < rows - turningPoint - 1) i++;
+        else if (i == rows - turningPoint - 1 && j > turningPoint) j--;
+        else i--;
+
+        if (i == turningPoint + 1 && j == turningPoint && turningPoint != columns - turningPoint - 1) turningPoint++;
+        // Проверка на <turningPoint != columns - turningPoint - 1> нужна в самом конце, чтобы заполнение после предпоследнего шага не пошло в обратную сторону. 
+        // Эта проверка актуальна, когда <rows > columns> на <+2> (например, 7*5, 9*7). Возможно есть и другие размеры массива, где понадобится эта проверка. 
+
+        count++;
+    }
+    LibraryHelp.Methods.PrintArray(numbers);
 }
 
 
